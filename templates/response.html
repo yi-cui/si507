@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8"/>
+    <title>HTML Forms Demo</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<style>
+  .body{
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .result {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 10px;
+    justify-content: start;
+  }
+
+</style>
+<body>
+    <h1>
+        Your searching result for {{genre}} movie at rating {{rating}}:
+    </h1>
+    <div class="result">
+    {% if movielist != []: %}
+      {% for movies in movielist: %}
+        <div>
+          <h2>Title: {{movies.title}} </h2>
+          <h3>Bachdel Test: {{movies.test}} </h3>
+          <img src= {{movies.poster_link}} alt="movie poster" width = 200px>
+          <p>Viewed <b>{{movies.youtube_view_number}}</b> times on Youtube </p>
+        </div>
+
+      {% endfor %}
+    {% else: %}
+      <p>No result, please change rating or genre. </p>
+    {% endif %}
+    </div>
+    <a href="/"><p>Return for search</p></a>
+
+ 
+</body>
+
+</html>
