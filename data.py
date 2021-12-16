@@ -30,30 +30,41 @@ class rating_bst:
             else:
                 self._insert(value,cur_node.rightchild)
 	
-    def convert_to_list(self):
+    def print_tree(self):
         if self.root != None:
-            self.converttolist(self.root)
+            self._printtree(self.root)
 
 
-    def converttolist(self,cur_node):
-        if cur_node == None:
-            return []
-        return [cur_node.value,[self.converttolist(cur_node.leftchild),self.converttolist(cur_node.rightchild)]]
-    
-    def converttolist(self,cur_node):
+    def _printtree(self,cur_node):
         if cur_node != None:
-            startvalue = cur_node.value
-            leftlist = self.converttolist(cur_node.leftchild)
-            rightlist = self.converttolist(cur_node.rightchild)
-            return [startvalue,[leftlist,rightlist]]
-        if cur_node == None:
+            self._printtree(cur_node.leftchild)
+            print(cur_node.value)
+            self._printtree(cur_node.rightchild)
+
+
+    def convert_to_list(self):
+        return self._convert_to_list(self.root)
+
+    def _convert_to_list(self, cur_node):
+        if cur_node is None:
             return []
+        return [cur_node.value, self._convert_to_list(cur_node.leftchild), self._convert_to_list(cur_node.rightchild)]
+    
+    def convert_to_tree(self, a_list):
+            self.root = self._convert_to_tree(a_list)
+
+    def _convert_to_tree(self, a_list):
+        if a_list == []:
+            return
         
+        curr = node(a_list[0])
+        curr.leftchild = self._convert_to_tree(a_list[1])
+        curr.rightchild = self._convert_to_tree(a_list[2])
+        return curr
 
-
+#open the csv file and create a dictionary to store the data:
 filename = "movies_independent_part_2.csv"
 dict = {}
-
 with open(filename, 'r') as csvfile:
 	movie = csv.reader(csvfile)
 	for row in movie:
@@ -67,13 +78,11 @@ with open(filename, 'r') as csvfile:
 		except:
 			pass
 
-
-for keys in dict.keys():
-    tree = dict[keys]
-    listcontent = tree.convert_to_list()
-    print(listcontent)
-
-
+#convert the dictionary to a json file and store the data in the file:
+serializable = {}
+for k, v in dict.items():
+    serializable[k] = v.convert_to_list()
 
 with open('data.json', 'w') as outfile:
-    json.dump(dict, outfile)
+    json.dump(serializable, outfile, indent=4)
+
